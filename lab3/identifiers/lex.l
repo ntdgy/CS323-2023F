@@ -4,17 +4,31 @@
 
     // global variables
     int identifiers = 0;
-    int lines = 0;
+    int lines = 1;
 %}
 letter [a-zA-Z]
 letter_ {letter}|_
 digit [0-9]
 
+tokens (int|char|if|else|while|return|void)
+wrong {digit}{letter_}+
+ignore \'.\'
 %%
+
+\( { /* does nothing when seeing ( */ }
+\) { /* does nothing when seeing ) */ }
+\{ { /* does nothing when seeing { */ }
+\} { /* does nothing when seeing } */ }
+\; { /* does nothing when seeing ; */ }
+{tokens} {}
+{wrong} {}
+{ignore} {}
 {letter_}({letter_}|{digit})* { identifiers++; printf("line %d: %s\n", lines, yytext);} 
-\n {}
-[\t\r ]+ { /* does nothing when seeing white spaces except new line */ }
+\n { lines++; }
+[\t\r ]+ { }
 . { /* a final rule that matches when seeing any character but new line */ }
+
+
 <<EOF>> { printf("There are %d occurrences of valid identifiers\n", identifiers); yyterminate(); }
 
 %%

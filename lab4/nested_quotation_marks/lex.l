@@ -3,10 +3,13 @@
   #define EXIT_FAIL 1
 %}
 %%
-\"[^\"]*\" { printf("Matched a string literal: %s\n", yytext); }
+["]([^"\\\n])*["]   { printf("%s\n", yytext); }
+["]([^"\\\n]|\\(.|\n))*["] {printf("%s\n", yytext);}
+[\t\r ]+ { }
 \n {}
 . {}
 %%
+
 int main(int argc, char **argv){
     char *file_path;
     if(argc < 2){

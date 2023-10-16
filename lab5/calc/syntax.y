@@ -2,8 +2,10 @@
     #include "lex.yy.c"
     void yyerror(const char*);
 %}
+
 %token INT
 %token ADD SUB MUL DIV
+
 %%
 Calc: /* to allow empty input */
     | Exp { printf("= %d\n", $1); }
@@ -18,6 +20,7 @@ Factor: Term
 Term: INT
     ;
 %%
+
 void yyerror(const char *s) {
     fprintf(stderr, "%s\n", s);
 }
